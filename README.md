@@ -8,9 +8,7 @@ This reposity is official implementation of
 ```
 
 ## 2. Dataset And Model
-``` shell
-
-```
+The datasets (i.e., Office-31, Office-home, and VisDA-C) and corresponding source models are availabel at https://zenodo.org/records/14722689.
 
 ## 3. Code
 ### 3.1 Office-Home
