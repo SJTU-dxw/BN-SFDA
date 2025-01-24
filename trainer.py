@@ -377,7 +377,7 @@ class TrainerSFDAClassRelation(object):
                                                    source_weak_prob, source_weak_feat, source_weak_logits, source_strong_logits[0:tgt_unlabeled_size],
                                                    batch_metrics, tgt_unlabeled_label)
 
-            # fixmatchËğÊ§
+            # fixmatchæŸå¤±
             pseudo_label = torch.softmax(target_weak_logits.detach(), dim=-1)
             max_probs, tgt_u = torch.max(pseudo_label, dim=-1)
             tgt_u = self.obtain_batch_label(online_weak_feat)
@@ -768,7 +768,10 @@ class TrainerSFDAClassRelation(object):
         centroid_target = torch.mean(self.aad_weak_score_bank[idx_near_final.long()], dim=1)
         centroid_source = torch.mean(self.source_aad_weak_score_bank[idx_near_final.long()], dim=1)
         kl = F.kl_div(centroid_source.log(), centroid_target, reduction="none").sum(-1)
-        confidence = torch.exp(-1.0 * kl).detach()
+        if self.is_distributed:
+            confidence, _ = torch.max((concat_all_gather(score_ema) + concat_all_gather(score_source)) / 2, dim=-1)
+        else:
+            confidence, _ = torch.max((score_ema + score_source) / 2, dim=-1)
         confidence = 2 * confidence / (1 + confidence)
 
         batch_metrics['loss']['confidence'] = torch.mean(confidence).item()
@@ -794,12 +797,12 @@ class TrainerSFDAClassRelation(object):
         return loss_1, neg_pred, loss_source
 
     def __call__(self, train_iteration=None):
-        # ÉèÖÃÑµÁ·±êÖ¾
+        # è®¾ç½®è®­ç»ƒæ ‡å¿—
         self.set_train_state()
         self.source_model_dict["base_model"].eval()
 
         logger = get_logger('basicda', self.logdir, logging.INFO)
-        # ¸ù¾İschedulerµÄ¼ÇÂ¼ÉèÖÃµü´ú´ÎÊı
+        # æ ¹æ®schedulerçš„è®°å½•è®¾ç½®è¿­ä»£æ¬¡æ•°
         train_loader_num = len(self.train_loader_iterator)
         tmp_iteration = 0
         while tmp_iteration < train_iteration:
@@ -817,7 +820,7 @@ class TrainerSFDAClassRelation(object):
                     self.train_loader_iterator[ind] = self.train_loaders[ind].__iter__()
                     time.sleep(2)
                     all_data.append(next(self.train_loader_iterator[ind]))
-            # Êı¾İÒÆ¶¯µ½GPUÉÏ
+            # æ•°æ®ç§»åŠ¨åˆ°GPUä¸Š
             relocated_data = move_data_to_gpu(all_data, self.local_rank)
             self.train_batch_output = self.train_iter(*relocated_data)
 
@@ -886,7 +889,7 @@ def deal_with_val_interval(val_interval, max_iters, trained_iteration=0):
         current_checkpoint = 0
         milestone_list = sorted(val_interval.keys())
         assert milestone_list[0] > 0 and milestone_list[-1] <= max_iters, 'check val interval keys'
-        # Èç¹û×îºóÒ»¸ö²»ÊÇmax_iter£¬Ôò°´×îºóµÄinterval¼ÆËã
+        # å¦‚æœæœ€åä¸€ä¸ªä¸æ˜¯max_iterï¼Œåˆ™æŒ‰æœ€åçš„intervalè®¡ç®—
         if milestone_list[-1] != max_iters:
             val_interval[max_iters] = val_interval[milestone_list[-1]]
             milestone_list.append(max_iters)
