@@ -4,7 +4,15 @@ This reposity is official implementation of
 
 ## 1. Preparation
 ``` shell
-
+conda create -n BN_SFDA python=3.8
+source activate BN_SFDA
+pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+pip install mmcv-full==1.6.0 -f https://download.openmmlab.com/mmcv/dist/cu101/torch1.6.0/index.html
+pip install scikit-learn
+pip install mmcls
+pip install tqdm
+pip install transformers
+pip install ftfy
 ```
 
 ## 2. Dataset And Model
