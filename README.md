@@ -40,5 +40,5 @@ CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 m
 
 ### 3.2 VisDA-C
 ``` shell
-CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_visda/class_relation_visda_AaD_2gpu.py --pretrained_model VisDA/source_only_visda.pth --num_k 5 --stop_iteration 0 --kl_weight 0.3
+CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_visda/class_relation_visda_AaD_2gpu.py --pretrained_model VisDA/source_only_visda.pth --num_k 5 --stop_iteration 0 --kl_weight 0.3 --temp 0.12
 ```
