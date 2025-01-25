@@ -46,7 +46,7 @@ CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 m
 ### 3.3 Office-31
 ``` shell
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_office/class_relation_office31_AaD_ad.py --pretrained_model office/source_only_a.pth --num_k 4 --stop_iteration -1
-CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_office/class_relation_office31_AaD_aw.py --pretrained_model office/source_only_a.pth --num_k 4 --stop_iteration -1
+CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_office/class_relation_office31_AaD_aw.py --pretrained_model office/source_only_a.pth --num_k 4 --stop_iteration -1 --beta 1.0
 
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_office/class_relation_office31_AaD_da.py --pretrained_model office/source_only_d.pth --num_k 4 --stop_iteration -1
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_office/class_relation_office31_AaD_dw.py --pretrained_model office/source_only_d.pth --num_k 4 --stop_iteration -1
