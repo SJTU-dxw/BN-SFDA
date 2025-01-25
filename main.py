@@ -37,6 +37,7 @@ parser.add_argument("--no_fusion", action="store_true")
 parser.add_argument("--no_centroid", action="store_true")
 parser.add_argument("--kl_weight", type=float, default=0.0)
 parser.add_argument("--temp", type=float, default=0.07)
+parser.add_argument("--beta", type=float, default=0.0)
 parser.add_argument("--pretrained_model", type=str, default="OfficeHome-Res50/source_only_A.pth")
 args = parser.parse_args()
 
@@ -86,7 +87,7 @@ if local_rank == 0:
 # create logger
 timestamp = time.strftime('runs_%Y_%m%d_%H%M%S', time.localtime())
 
-beta = cfg["train"].get('beta', 0.0)
+beta = args.beta  # cfg["train"].get('beta', 0.0)
 path_name = f'{os.path.basename(args.config)[:-3]}_num_k_{args.num_k}_weight_{args.weight}_klweight_{args.kl_weight}_temp+{args.temp}_beta_{beta}_stop_{args.stop_iteration}_rank_{local_rank}_{timestamp}.log'
 if args.no_centroid:
     path_name = "no_centroid_" + path_name
