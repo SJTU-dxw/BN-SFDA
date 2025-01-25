@@ -55,7 +55,7 @@ def move_data_to_gpu(cpu_data, gpu_id):
 
 class TrainerSFDAClassRelation(object):
     def __init__(self, local_rank, model_dict, optimizer_dict, source_model_dict, source_optimizer_dict,
-                 train_loader, logdir, is_distributed, pseudo_update_interval, beta, num_k, weight, kl_weight,
+                 train_loader, logdir, is_distributed, pseudo_update_interval, beta, num_k, weight, kl_weight, temp,
                  stop_iteration, no_fusion, no_centroid, feat_dim=256, bank_size=512, max_iters=15000):
         self.local_rank = local_rank
         self.model_dict = model_dict
@@ -100,8 +100,8 @@ class TrainerSFDAClassRelation(object):
         self.lambda_aad = 1.0
         self.prob_threshold = 0.95
         self.lambda_nce = 1.0
-        self.lambda_temp = 0.07
-        self.lambda_fixmatch_temp = 0.07
+        self.lambda_temp = temp
+        self.lambda_fixmatch_temp = temp
         self.pseudo_update_interval = pseudo_update_interval
         self.threshold = 0
         self.lambda_fixmatch = 1.0
