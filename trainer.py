@@ -856,7 +856,14 @@ class TrainerSFDAClassRelation(object):
                 new_weights[new_key] = weights[key]
             self.model_dict['base_model'].load_state_dict(new_weights, strict=False)
         else:
-            self.model_dict['base_model'].load_state_dict(weights, strict=False)
+            new_weights = OrderedDict()
+            for key in weights:
+                if "module." not in key:
+                    new_key = "module." + key  # key.replace("module.", "")
+                else:
+                    new_key = key
+                new_weights[new_key] = weights[key]
+            resp = self.model_dict['base_model'].load_state_dict(new_weights, strict=False)
 
 
 def deal_with_val_interval(val_interval, max_iters, trained_iteration=0):
