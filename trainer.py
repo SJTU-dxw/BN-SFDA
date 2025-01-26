@@ -27,7 +27,14 @@ def load_pretrained_model(model_dict, weights_path, is_distributed):
             new_weights[new_key] = weights[key]
         model_dict['base_model'].load_state_dict(new_weights, strict=False)
     else:
-        model_dict['base_model'].load_state_dict(weights, strict=False)
+        new_weights = OrderedDict()
+        for key in weights:
+            if "module." not in key:
+                new_key = "module." + key  # key.replace("module.", "")
+            else:
+                new_key = key
+            new_weights[new_key] = weights[key]
+        resp = model_dict['base_model'].load_state_dict(new_weights, strict=False)
 
 
 @torch.no_grad()
