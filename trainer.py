@@ -850,6 +850,8 @@ class TrainerSFDAClassRelation(object):
     def load_pretrained_model(self, weights_path, is_distributed):
         weights = torch.load(weights_path, map_location='cpu')
         weights = weights['base_model']
+        weights = OrderedDict((f"module.{k}" if not k.startswith("module.") else k, v) for k, v in weights.items())
+        
         for key in weights:
             key_split = key.split('.')
             if key_split[1] in ['target_network', 'target_classifier']:
