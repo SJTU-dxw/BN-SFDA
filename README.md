@@ -16,7 +16,7 @@ pip install ftfy
 ```
 
 ## 2. Dataset And Model
-The datasets (i.e., Office-31, Office-home, and VisDA-C) and corresponding source models are availabel at https://zenodo.org/records/14722689.
+The datasets (i.e., Office-31, Office-home, and VisDA-C) and corresponding source models are availabel at https://zenodo.org/records/14751811.
 
 ## 3. Code
 ### 3.1 Office-Home
