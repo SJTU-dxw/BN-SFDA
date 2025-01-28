@@ -432,7 +432,7 @@ class TrainerSFDAClassRelation(object):
             info_nce_loss_2 = self.instance_contrastive_loss(weak_feat_for_backbone, k_strong_for_backbone,
                                                              tmp_strong_negative_bank)
             info_nce_loss = (info_nce_loss_1 + info_nce_loss_2 + info_nce_loss_3) / 3.0
-            if args.simple_mode == "False":
+            if self.simple_mode == "False":
                 loss += info_nce_loss * self.lambda_nce
 
         self.scaler.scale(loss).backward()
@@ -801,7 +801,7 @@ class TrainerSFDAClassRelation(object):
         dot_neg_source = (dot_neg_source * mask.to("cuda:{}".format(self.local_rank))).sum(-1)
         dot_neg_source = torch.mean(dot_neg_source)
 
-        if args.simple_mode == "True":
+        if self.simple_mode == "True":
             msoftmax = outputs.mean(dim=0)
             neg_pred = torch.sum(msoftmax * torch.log(msoftmax + 1e-5))
         
