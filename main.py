@@ -222,7 +222,7 @@ source_model_dict["base_model"] = source_model
 source_optimizer_dict["base_model"] = source_optimizer
 
 # build trainer
-beta = cfg["train"].get('beta', 0.0)
+# beta = cfg["train"].get('beta', 0.0)
 trainer = TrainerSFDAClassRelation(rank, model_dict, optimizer_dict, source_model_dict, source_optimizer_dict,
                                    train_loader, logdir, is_distributed, cfg["train"]['pseudo_update_interval'],
                                    beta, args.num_k, args.weight, args.kl_weight, args.temp, args.stop_iteration,
