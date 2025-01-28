@@ -63,7 +63,7 @@ def move_data_to_gpu(cpu_data, gpu_id):
 class TrainerSFDAClassRelation(object):
     def __init__(self, local_rank, model_dict, optimizer_dict, source_model_dict, source_optimizer_dict,
                  train_loader, logdir, is_distributed, pseudo_update_interval, beta, num_k, weight, kl_weight, temp,
-                 stop_iteration, no_fusion, no_centroid, feat_dim=256, bank_size=512, max_iters=15000):
+                 stop_iteration, simple_mode, no_fusion, no_centroid, feat_dim=256, bank_size=512, max_iters=15000):
         self.local_rank = local_rank
         self.model_dict = model_dict
         self.optimizer_dict = optimizer_dict
@@ -146,6 +146,7 @@ class TrainerSFDAClassRelation(object):
         self.num_k = num_k
         self.weight = weight  # Use for Centroid
         self.kl_weight = kl_weight  # Use for COnsistency Loss
+        self.simple_mode = simple_mode
         self.fusion_flag = not no_fusion  # Use Source Model
         self.use_centroid = not no_centroid  # Use Centroid
         self.stop_iteration = stop_iteration
@@ -431,8 +432,8 @@ class TrainerSFDAClassRelation(object):
             info_nce_loss_2 = self.instance_contrastive_loss(weak_feat_for_backbone, k_strong_for_backbone,
                                                              tmp_strong_negative_bank)
             info_nce_loss = (info_nce_loss_1 + info_nce_loss_2 + info_nce_loss_3) / 3.0
-
-            loss += info_nce_loss * self.lambda_nce
+            if args.simple_mode == "False":
+                loss += info_nce_loss * self.lambda_nce
 
         self.scaler.scale(loss).backward()
         self.scaler_source.scale(loss_source).backward()
@@ -799,6 +800,13 @@ class TrainerSFDAClassRelation(object):
         dot_neg_source = outputs_source @ outputs_source.T
         dot_neg_source = (dot_neg_source * mask.to("cuda:{}".format(self.local_rank))).sum(-1)
         dot_neg_source = torch.mean(dot_neg_source)
+
+        if args.simple_mode == "True":
+            msoftmax = outputs.mean(dim=0)
+            neg_pred = torch.sum(msoftmax * torch.log(msoftmax + 1e-5))
+        
+            msoftmax = outputs_source.mean(dim=0)
+            dot_neg_source = torch.sum(msoftmax * torch.log(msoftmax + 1e-5))
 
         loss_source += dot_neg_source
         return loss_1, neg_pred, loss_source
