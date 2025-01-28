@@ -21,6 +21,9 @@ The datasets (i.e., Office-31, Office-home, and VisDA-C) and corresponding sourc
 ## 3. Code
 ### 3.1 Office-Home
 ``` shell
+wget https://zenodo.org/records/14751811/files/Dataset_Office-home.zip
+wget https://zenodo.org/records/14751811/files/Model_Office-home.zip
+
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_class_relation/class_relation_officehome_AaD_AC.py --pretrained_model OfficeHome-Res50/source_only_A.pth --num_k 4 --stop_iteration 5000
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_class_relation/class_relation_officehome_AaD_AP.py --pretrained_model OfficeHome-Res50/source_only_A.pth --num_k 4 --stop_iteration 5000
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_class_relation/class_relation_officehome_AaD_AR.py --pretrained_model OfficeHome-Res50/source_only_A.pth --num_k 4 --stop_iteration 5000
@@ -40,11 +43,17 @@ CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 m
 
 ### 3.2 VisDA-C
 ``` shell
+wget https://zenodo.org/records/14751811/files/Dataset_VisDA-C.zip
+wget https://zenodo.org/records/14751811/files/Model_VisDA-C.zip
+
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_visda/class_relation_visda_AaD_2gpu.py --pretrained_model VisDA/source_only_visda.pth --num_k 5 --stop_iteration 0 --kl_weight 0.3 --temp 0.12
 ```
 
 ### 3.3 Office-31
 ``` shell
+wget https://zenodo.org/records/14751811/files/Dataset_Office-31.tar.gz
+wget https://zenodo.org/records/14751811/files/Model_Office-31.zip
+
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_office/class_relation_office31_AaD_ad.py --pretrained_model office/source_only_a.pth --num_k 4 --stop_iteration 0 --simple_mode True
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_office/class_relation_office31_AaD_aw.py --pretrained_model office/source_only_a.pth --num_k 4 --stop_iteration 0
 
