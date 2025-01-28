@@ -21,8 +21,8 @@ The datasets (i.e., Office-31, Office-home, and VisDA-C) and corresponding sourc
 ## 3. Code
 ### 3.1 Office-Home
 ``` shell
-wget https://zenodo.org/records/14751811/files/Dataset_Office-home.zip
-wget https://zenodo.org/records/14751811/files/Model_Office-home.zip
+wget https://zenodo.org/records/14751811/files/Dataset_Office-Home.zip
+wget https://zenodo.org/records/14751811/files/Model_Office-Home.zip
 
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_class_relation/class_relation_officehome_AaD_AC.py --pretrained_model OfficeHome-Res50/source_only_A.pth --num_k 4 --stop_iteration 5000
 CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_class_relation/class_relation_officehome_AaD_AP.py --pretrained_model OfficeHome-Res50/source_only_A.pth --num_k 4 --stop_iteration 5000
