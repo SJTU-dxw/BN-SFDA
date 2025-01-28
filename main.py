@@ -39,6 +39,7 @@ parser.add_argument("--kl_weight", type=float, default=0.0)
 parser.add_argument("--temp", type=float, default=0.07)
 parser.add_argument("--beta", type=float, default=0.0)
 parser.add_argument("--pretrained_model", type=str, default="OfficeHome-Res50/source_only_A.pth")
+parser.add_argument("--simple_mode", type=str, default="False")
 args = parser.parse_args()
 
 is_distributed = args.local_rank != -1
@@ -88,7 +89,7 @@ if local_rank == 0:
 timestamp = time.strftime('runs_%Y_%m%d_%H%M%S', time.localtime())
 
 beta = args.beta  # cfg["train"].get('beta', 0.0)
-path_name = f'{os.path.basename(args.config)[:-3]}_num_k_{args.num_k}_weight_{args.weight}_klweight_{args.kl_weight}_temp+{args.temp}_beta_{beta}_stop_{args.stop_iteration}_rank_{local_rank}_{timestamp}.log'
+path_name = f'{os.path.basename(args.config)[:-3]}_num_k_{args.num_k}_weight_{args.weight}_klweight_{args.kl_weight}_temp+{args.temp}_beta_{beta}_stop_{args.stop_iteration}_Simple_{args.simple_mode}_rank_{local_rank}_{timestamp}.log'
 if args.no_centroid:
     path_name = "no_centroid_" + path_name
 if args.no_fusion:
@@ -226,7 +227,7 @@ source_optimizer_dict["base_model"] = source_optimizer
 trainer = TrainerSFDAClassRelation(rank, model_dict, optimizer_dict, source_model_dict, source_optimizer_dict,
                                    train_loader, logdir, is_distributed, cfg["train"]['pseudo_update_interval'],
                                    beta, args.num_k, args.weight, args.kl_weight, args.temp, args.stop_iteration,
-                                   args.no_fusion, args.no_centroid, max_iters=max_iters)
+                                   args.simple_mode, args.no_fusion, args.no_centroid, max_iters=max_iters)
 trained_iteration = 0
 
 # load pretrained weights
