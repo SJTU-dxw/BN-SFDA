@@ -46,7 +46,7 @@ CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 m
 wget https://zenodo.org/records/14751811/files/Dataset_VisDA-C.zip
 wget https://zenodo.org/records/14751811/files/Model_VisDA-C.zip
 
-CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_visda/class_relation_visda_AaD_2gpu.py --pretrained_model VisDA/source_only_visda.pth --num_k 5 --stop_iteration 0 --kl_weight 0.3 --temp 0.12
+CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.launch --nproc_per_node=2 main.py --config ./configs/sfda_visda/class_relation_visda_AaD_2gpu.py --pretrained_model VisDA/source_only_visda.pth --num_k 5 --stop_iteration 0 --kl_weight 0.3 --temp 0.12 --beta 5.0
 ```
 
 ### 3.3 Office-31
