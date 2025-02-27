@@ -1,6 +1,6 @@
 # BN-SFDA
 
-This reposity is official implementation of
+This reposity is official implementation of "Leveraging Frozen Batch Normalization for Co-Training in Source-Free Domain Adaptation" (AISTATS 2025).
 
 ## 1. Preparation
 ``` shell
